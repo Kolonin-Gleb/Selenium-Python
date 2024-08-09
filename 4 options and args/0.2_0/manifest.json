@@ -1,0 +1,17 @@
+{
+   "action": {
+      "default_icon": "mouse.png",
+      "default_popup": "popup.html"
+   },
+   "content_scripts": [ {
+      "js": [ "content.js" ],
+      "matches": [ "\u003Call_urls>" ]
+   } ],
+   "content_security_policy": {
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgeiAWsxc5AcK3JkCLEWgWcgkOtRG5Y0Wh0lEiOPE6HdV7kc7nQ90zzbz4wZt8BbyhzX8lBEMY1wXxMoV3aCG3rdIFIjW60Vm+Uh+eWq3t2O2e449sai8iBlDpK8udZe7TcyMesGfCI+vKtijCaOvwdckI9hAHLKAm7LHjAbW6xfy/71zQ0ZBI9Z0gX/VON2EdgcuiF1zJZlY5qk+FPGISp8luti5dAQwBZsDr42MYf5Vxv6L0t21hsLAN/a+1VV4K/B7V93WafV/QeEhErB/bvRj82FEhvnornXDhZHrx+x9bJmDECWGFFYPM/iNCi83wMI8cTEchDK3+ls68gJHdwIDAQAB",
+   "manifest_version": 3,
+   "name": "Mouse Coordinates",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.2"
+}
