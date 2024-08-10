@@ -103,6 +103,47 @@ with webdriver.Chrome(options=options) as browser:
     print(result_sum)
 """
 
-# 7 
+# 7 Получить значения из полей при checked checkboxes
+"""
+with webdriver.Chrome(options=options) as browser:
+    result_sum = 0
+    browser.get('https://parsinger.ru/selenium/5.5/3/1.html')
+
+    textareas_els = browser.find_elements(By.TAG_NAME, 'textarea')
+    checkboxes_els = browser.find_elements(By.TAG_NAME, 'input')
+
+    for textarea_el, checkbox_el in zip(textareas_els, checkboxes_els):
+        if checkbox_el.is_selected() == True:
+            result_sum += int(textarea_el.text)
+
+    print(result_sum)
+"""
+
+# 8 Перенос значений и выполнение проверок
+"""
+with webdriver.Chrome(options=options) as browser:
+    browser.get("https://parsinger.ru/selenium/5.5/4/1.html")
+
+    buttons_els = browser.find_elements(By.TAG_NAME, 'button')
+
+    # Собираю все значения из grey boxes и стираю их
+    grey_boxes_values = []
+    for i in range(1, 51):
+        grey_box = browser.find_element(By.XPATH, f'//*[@id="container"]/div[{i}]/textarea[1]')
+        grey_boxes_values.append(grey_box.text)
+        grey_box.clear()
+    
+    # Устанавливаю значения в blue boxes и выполняю проверку
+    for i in range(1, 51):
+        # Установка значений
+        browser.find_element(By.XPATH, f'//*[@id="container"]/div[{i}]/textarea[2]').send_keys(grey_boxes_values[i-1])
+        # Проверка (перекраска полей)
+        buttons_els[i-1].click()
+
+    buttons_els[-1].click() # Итоговая кнопка проверки
+    time.sleep(10)
+"""
+
+# 9 
 """
 """
