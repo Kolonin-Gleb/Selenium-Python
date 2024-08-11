@@ -144,6 +144,56 @@ with webdriver.Chrome(options=options) as browser:
     time.sleep(10)
 """
 
-# 9 
+# 9 Работа с кнопками, выпадающими списками, checkbox-ами
+"""
+from selenium.webdriver.support.ui import Select
+with webdriver.Chrome(options=options) as browser:
+    browser.get("https://parsinger.ru/selenium/5.5/5/1.html") # task link
+    time.sleep(2) # чтобы страница точно успела загрузиться
+    
+    color_codes = []
+    span_els = browser.find_elements(By.TAG_NAME, 'span') # color codes elements
+    color_codes = [span_el.text for span_el in span_els]
+
+    select_els = browser.find_elements(By.TAG_NAME, 'select') # drop-down lists
+    input_els = browser.find_elements(By.TAG_NAME, 'input') # input fileds
+
+    # Получение div-ов с цветнымми кнопками
+    div_buttons_els = []
+    for i in range(1, 51): # TODO: Магическое число. Известно, что на сайте имеется 50 блоков с кнопками
+        div_buttons_els.append(browser.find_element(By.XPATH, f'//*[@id="main-container"]/div[{i}]/div'))
+
+    # простановка checkboxes и вставка цветов в input
+    color_codes_iterator = iter(color_codes) # TODO: можно ли написать оптимальнее?
+    for i, input_el in enumerate(input_els):
+        if i % 2 == 0:
+            input_el.click()
+        else:
+            input_el.send_keys(next(color_codes_iterator))
+
+    # Установка цвета в выпадающие списки и нажатие кнопок того же цвета
+    for div_button_el, color, select_el in zip(div_buttons_els, color_codes, select_els):
+        # Установка цвета в вып. список
+        select_el = Select(select_el)
+        select_el.select_by_value(color)
+        # Нажатие кнопки того же цвета
+        buttons_els = div_button_el.find_elements(By.TAG_NAME, 'button')
+        for button_el in buttons_els:
+            if button_el.get_attribute('data-hex') == color:
+                button_el.click() # нажите кнопки цвета
+                break
+
+    # Проверка всех секций
+    for i in range(1, 51): # TODO: Магическое число. Известно, что на сайте имеется 50 блоков с кнопками
+        browser.find_element(By.XPATH, f'//*[@id="main-container"]/div[{i}]/button').click()
+
+    # Руками нажимаю последнюю кнопку
+    time.sleep(30)
+"""
+
+# 10 
 """
 """
+
+
+
