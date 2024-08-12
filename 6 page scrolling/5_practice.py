@@ -41,7 +41,7 @@ with webdriver.Chrome(options=options) as browser:
     print(result_sum)
 """
 
-# 2 Сбор чисел с бесконечной ленты.
+# 2 Сбор и суммирование чисел с бесконечной ленты.
 # Я собрал данные с помощью выделения.
 # Сложил 5ти значные числа в Excel и прибавил к ним сумму 6ти значных, полученных из этой стрки при копировании.
 # def split_text(text, chunk_size=6):
@@ -53,8 +53,134 @@ with webdriver.Chrome(options=options) as browser:
 # print(sum(result))
 
 
-# 2 Сбор чисел с бесконечной ленты.
+# 2 Сбор и суммирование чисел с бесконечной ленты.
 # Программное решение
 """
+from selenium.webdriver.common.action_chains import ActionChains
+with webdriver.Chrome(options=options) as browser:
+    browser.get('https://parsinger.ru/infiniti_scroll_1/')
+    time.sleep(3)
+    result_sum = 0
+    div = browser.find_element(By.XPATH, '//*[@id="scroll-container"]/div') # Первый div вложенный в div контейнер
+
+    for x in range(10):
+        ActionChains(browser).move_to_element(div).scroll_by_amount(1, 10).perform()
+        time.sleep(2)
+
+    elements = browser.find_elements(By.XPATH, '//span[starts-with(@id, "__InfiScroll_")]')
+
+    for element in elements:
+        value = element.text
+        if value.isdigit():
+            result_sum += int(value)
+
+    print(result_sum)
 """
 
+# 3 Сбор и суммирование чисел с бесконечной ленты.
+"""
+from selenium.webdriver.common.action_chains import ActionChains
+with webdriver.Chrome(options=options) as browser:
+    browser.get('https://parsinger.ru/infiniti_scroll_2/')
+    time.sleep(3)
+    result_sum = 0
+    div = browser.find_element(By.XPATH, '//*[@id="scroll-container"]/div') # Первый div вложенный в div контейнер
+
+    for x in range(10):
+        ActionChains(browser).move_to_element(div).scroll_by_amount(1, 10).perform()
+        time.sleep(1)
+
+    elements = browser.find_elements(By.XPATH, '//p[starts-with(@id, "__InfiScroll_")]')
+
+    for element in elements:
+        value = element.text
+        if value.isdigit():
+            result_sum += int(value)
+
+    print(result_sum)
+"""
+
+# 4 Сбор и суммирование чисел из нескольких окон прокрутки.
+"""
+from selenium.webdriver.common.action_chains import ActionChains
+with webdriver.Chrome(options=options) as browser:
+    browser.get('https://parsinger.ru/infiniti_scroll_3/')
+    time.sleep(2)
+    result_sum = 0
+
+    for i in range(1, 6):
+        div = browser.find_element(By.XPATH, f'//*[@id="scroll-container_{i}"]/div')
+
+        for x in range(10):
+            ActionChains(browser).move_to_element(div).scroll_by_amount(1, 10).perform()
+            time.sleep(1)
+        ActionChains(browser).reset_actions()
+
+    # Находит сразу все прогруженные ранее значения во всех скроллах
+    elements = browser.find_elements(By.XPATH, '//span[starts-with(@id, "__InfiScroll_")]')
+
+    for element in elements:
+        result_sum += int(element.text)
+
+    print(result_sum) # 443968780 # 159858750
+"""
+
+# 5 Клики по элементам
+"""
+# При использовании selenium 4.21.0, клики по элементам работают без нужды в скролле к элементу.
+# Так ли это?
+with webdriver.Chrome(options=options) as browser:
+    browser.get('https://parsinger.ru/selenium/5.7/1/index.html')
+    time.sleep(2)
+    uran_els = browser.find_elements(By.CLASS_NAME, 'clickMe')
+    for uran_el in uran_els:
+        uran_el.click()
+    
+    time.sleep(1000)
+"""
+
+# Answer: GFL4-ED40-F32F-HJ24-0BXS-235N-PIRE-123VD-123F
+# 6 Удерживание кнопок нужное время
+"""
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
+with webdriver.Chrome(options=options) as driver:
+    driver.get('https://parsinger.ru/selenium/5.7/5/index.html')
+    buttons = driver.find_elements(By.XPATH, "//button[@class='timer_button']")
+    for button in buttons:
+        hold_time = float(button.text)
+        action = ActionChains(driver)
+        action.click_and_hold(button).pause(hold_time).release(button).perform()
+
+    WebDriverWait(driver, 10).until(EC.alert_is_present())
+    alert_text = driver.switch_to.alert.text
+    print(alert_text)
+"""
+
+# 7 
+"""
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+with webdriver.Chrome(options=options) as browser:
+    browser.get("https://parsinger.ru/selenium/5.7/4/index.html")
+
+    while len(browser.find_elements(By.CSS_SELECTOR, "input")) < 1000: # Пока не находим все input-ы
+        # находим последний на этой странице и скролим до него.
+        last = browser.find_element(By.CSS_SELECTOR, ".child_container:last-child")
+        browser.execute_script("return arguments[0].scrollIntoView(true)", last)
+
+    # Обработка всех прогруженных input-ов
+    for cb in browser.find_elements(By.CSS_SELECTOR, "input"):
+        if int(cb.get_attribute("value")) % 2 == 0:
+            # Скролим до тех input, что чётные и требуют нажатия
+            browser.execute_script("return arguments[0].scrollIntoView(true)", cb)
+            cb.click()
+    
+    browser.find_element(By.CSS_SELECTOR, ".alert_button").click()
+    print(browser.switch_to.alert.text) # 5402f04236450f263540jk406504l506
+"""
+
+
+    
