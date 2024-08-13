@@ -158,7 +158,7 @@ with webdriver.Chrome(options=options) as driver:
     print(alert_text)
 """
 
-# 7 
+# 7 Скроллинг с нажатием чётных input-ов 
 """
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -182,5 +182,3 @@ with webdriver.Chrome(options=options) as browser:
     print(browser.switch_to.alert.text) # 5402f04236450f263540jk406504l506
 """
 
-
-    
